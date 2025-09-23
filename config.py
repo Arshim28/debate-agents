@@ -83,8 +83,8 @@ def save_config(config: SystemConfig):
 def get_llm_from_config(model_config: ModelConfig):
     if model_config.provider == "openrouter":
         from langchain_openai import ChatOpenAI
-        # Use provided API key directly
-        api_key = "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"
+        # Use API key from environment variable
+        api_key = os.getenv(model_config.api_key_env)
 
         # Configure reasoning effort via OpenRouter headers
         extra_headers = {}
