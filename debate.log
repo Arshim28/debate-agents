@@ -1,0 +1,55 @@
+2025-09-22 18:35:00,677 - data_loader - INFO - Loaded document: doc_4.md
+2025-09-22 18:35:00,677 - data_loader - INFO - Loaded document: doc_6.md
+2025-09-22 18:35:00,677 - data_loader - INFO - Loaded document: doc_1.md
+2025-09-22 18:35:00,677 - data_loader - INFO - Loaded document: doc_2.md
+2025-09-22 18:35:00,678 - data_loader - INFO - Loaded document: doc_5.md
+2025-09-22 18:35:00,678 - data_loader - INFO - Loaded document: doc_7.md
+2025-09-22 18:35:00,678 - data_loader - INFO - Loaded document: doc_3.md
+2025-09-22 18:35:01,549 - agents - INFO - Initialized agent: Calculative Analyst
+2025-09-22 18:35:01,550 - agents - INFO - Initialized agent: Conservative Investor
+2025-09-22 18:35:01,551 - agents - INFO - Initialized agent: Disciplined Strategist
+2025-09-22 18:35:01,552 - agents - INFO - Initialized agent: Hybrid Tactician
+2025-09-22 18:35:01,554 - agents - INFO - Initialized agent: Growth Optimist
+2025-09-22 18:35:01,555 - agents - INFO - Initialized agent: Risk Pessimist
+2025-09-22 18:35:01,556 - agents - INFO - Initialized agent: Radical Disruptor
+2025-09-22 18:35:01,557 - agents - INFO - Initialized agent: Speculative Trader
+2025-09-22 18:35:01,564 - enhanced_orchestrator - INFO - Enhanced Multi-Agent Debate Orchestrator initialized with 8 personas
+2025-09-22 18:35:01,568 - enhanced_orchestrator - INFO - Initializing enhanced multi-agent debate
+2025-09-22 18:35:01,568 - enhanced_orchestrator - INFO - Conducting debate round 1
+2025-09-22 18:35:01,569 - agents - INFO - Starting multi-agent debate with 8 agents
+2025-09-22 18:35:01,569 - agents - INFO - Starting round 1
+2025-09-22 18:35:01,569 - agents - ERROR - Error getting response from Growth Optimist: DebateAgent.respond() got an unexpected keyword argument 'opponent_messages'. Did you mean 'opponent_message'?
+2025-09-22 18:35:01,569 - agents - ERROR - Error getting response from Calculative Analyst: DebateAgent.respond() got an unexpected keyword argument 'opponent_messages'. Did you mean 'opponent_message'?
+2025-09-22 18:35:01,569 - agents - ERROR - Error getting response from Hybrid Tactician: DebateAgent.respond() got an unexpected keyword argument 'opponent_messages'. Did you mean 'opponent_message'?
+2025-09-22 18:35:01,569 - agents - ERROR - Error getting response from Speculative Trader: DebateAgent.respond() got an unexpected keyword argument 'opponent_messages'. Did you mean 'opponent_message'?
+2025-09-22 18:35:01,569 - agents - ERROR - Error getting response from Radical Disruptor: DebateAgent.respond() got an unexpected keyword argument 'opponent_messages'. Did you mean 'opponent_message'?
+2025-09-22 18:35:01,569 - agents - ERROR - Error getting response from Disciplined Strategist: DebateAgent.respond() got an unexpected keyword argument 'opponent_messages'. Did you mean 'opponent_message'?
+2025-09-22 18:35:01,570 - agents - ERROR - Error getting response from Conservative Investor: DebateAgent.respond() got an unexpected keyword argument 'opponent_messages'. Did you mean 'opponent_message'?
+2025-09-22 18:35:01,570 - agents - ERROR - Error getting response from Risk Pessimist: DebateAgent.respond() got an unexpected keyword argument 'opponent_messages'. Did you mean 'opponent_message'?
+2025-09-22 18:35:01,570 - agents - INFO - Debate completed with 0 total messages
+2025-09-22 18:35:01,570 - enhanced_orchestrator - INFO - Continuing debate - round 2 of 2
+2025-09-22 18:35:01,571 - enhanced_orchestrator - INFO - Evaluating debate progress after round 1
+2025-09-22 18:35:01,571 - enhanced_orchestrator - INFO - Calculative Analyst: 0/2 turns
+2025-09-22 18:35:01,571 - enhanced_orchestrator - INFO - Conservative Investor: 0/2 turns
+2025-09-22 18:35:01,572 - enhanced_orchestrator - INFO - Disciplined Strategist: 0/2 turns
+2025-09-22 18:35:01,572 - enhanced_orchestrator - INFO - Hybrid Tactician: 0/2 turns
+2025-09-22 18:35:01,572 - enhanced_orchestrator - INFO - Growth Optimist: 0/2 turns
+2025-09-22 18:35:01,572 - enhanced_orchestrator - INFO - Risk Pessimist: 0/2 turns
+2025-09-22 18:35:01,572 - enhanced_orchestrator - INFO - Radical Disruptor: 0/2 turns
+2025-09-22 18:35:01,572 - enhanced_orchestrator - INFO - Speculative Trader: 0/2 turns
+2025-09-22 18:35:01,572 - enhanced_orchestrator - INFO - Total messages so far: 0
+2025-09-22 18:35:01,573 - enhanced_orchestrator - INFO - Conducting debate round 2
+2025-09-22 18:35:01,573 - agents - INFO - Starting multi-agent debate with 8 agents
+2025-09-22 18:35:01,573 - agents - INFO - Starting round 1
+2025-09-22 18:35:01,573 - agents - ERROR - Error getting response from Disciplined Strategist: DebateAgent.respond() got an unexpected keyword argument 'opponent_messages'. Did you mean 'opponent_message'?
+2025-09-22 18:35:01,573 - agents - ERROR - Error getting response from Conservative Investor: DebateAgent.respond() got an unexpected keyword argument 'opponent_messages'. Did you mean 'opponent_message'?
+2025-09-22 18:35:01,573 - agents - ERROR - Error getting response from Calculative Analyst: DebateAgent.respond() got an unexpected keyword argument 'opponent_messages'. Did you mean 'opponent_message'?
+2025-09-22 18:35:01,573 - agents - ERROR - Error getting response from Growth Optimist: DebateAgent.respond() got an unexpected keyword argument 'opponent_messages'. Did you mean 'opponent_message'?
+2025-09-22 18:35:01,573 - agents - ERROR - Error getting response from Radical Disruptor: DebateAgent.respond() got an unexpected keyword argument 'opponent_messages'. Did you mean 'opponent_message'?
+2025-09-22 18:35:01,573 - agents - ERROR - Error getting response from Risk Pessimist: DebateAgent.respond() got an unexpected keyword argument 'opponent_messages'. Did you mean 'opponent_message'?
+2025-09-22 18:35:01,573 - agents - ERROR - Error getting response from Hybrid Tactician: DebateAgent.respond() got an unexpected keyword argument 'opponent_messages'. Did you mean 'opponent_message'?
+2025-09-22 18:35:01,574 - agents - ERROR - Error getting response from Speculative Trader: DebateAgent.respond() got an unexpected keyword argument 'opponent_messages'. Did you mean 'opponent_message'?
+2025-09-22 18:35:01,574 - agents - INFO - Debate completed with 0 total messages
+2025-09-22 18:35:01,574 - enhanced_orchestrator - INFO - Debate complete after 2 rounds
+2025-09-22 18:35:01,574 - enhanced_orchestrator - INFO - Generating enhanced meta-analysis
+2025-09-22 18:35:03,341 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
