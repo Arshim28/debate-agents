@@ -29,14 +29,14 @@ class EnhancedDebateOrchestrator:
         self.config = config
         self.data_loader = FinancialDataLoader(config.debate.data_directory)
 
-        # Create agent-specific model config (Grok with medium reasoning)
+        # Create agent-specific model config (Grok with very high reasoning)
         agent_model_config = ModelConfig(
             model_name="x-ai/grok-4-fast:free",
             temperature=0.3,
-            max_tokens=2000,  # Increased to 2k as requested
+            max_tokens=1000,  # 1k tokens for detailed analysis
             api_key_env="OPENROUTER_API_KEY",
-            reasoning_effort="medium",
-            max_reasoning_tokens=8000
+            reasoning_effort="high",
+            max_reasoning_tokens=15000
         )
 
         # Initialize enhanced multi-agent system with agent-specific config
@@ -51,7 +51,7 @@ class EnhancedDebateOrchestrator:
         self.checkpointer = MemorySaver()
         self.graph = self._build_enhanced_graph()
 
-        logger.info("Enhanced Multi-Agent Debate Orchestrator initialized with 8 personas")
+        logger.info("Dialectical Agent System initialized with 2 ethos personas")
 
     def _build_enhanced_graph(self) -> StateGraph:
         graph = StateGraph(EnhancedDebateState)
@@ -164,7 +164,7 @@ class EnhancedDebateOrchestrator:
     def _meta_analyze_node(self, state: EnhancedDebateState) -> EnhancedDebateState:
         logger.info("Generating enhanced meta-analysis")
 
-        meta_analysis = self.debate_system.generate_meta_analysis(state["debate_messages"])
+        meta_analysis = self.meta_agent.synthesize(state["debate_messages"])
 
         return {
             **state,

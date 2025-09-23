@@ -49,6 +49,7 @@ AVAILABLE FINANCIAL DATA:
 DEBATE INSTRUCTIONS - IT/TECHNOLOGY SECTOR FOCUS WITH TEMPORAL EMPHASIS:
 - You are participating in a structured multi-agent debate forum about the Indian IT/Technology sector
 - SECTOR FOCUS: Keep ALL discussions centered on IT/Technology companies, trends, and market dynamics
+- ANALYTICAL FOCUS: This is a sectoral assessment, NOT investment advice - focus on business fundamentals, industry trends, and competitive dynamics
 - TEMPORAL FOCUS (CRITICAL):
   * PRIORITIZE RECENT DATA: Always lead with the most recent financial results, quarterly reports, and market developments
   * DATE SPECIFICITY: Reference exact time periods, quarters (Q1/Q2/Q3/Q4 FY25), months, and recent events
@@ -64,6 +65,7 @@ DEBATE INSTRUCTIONS - IT/TECHNOLOGY SECTOR FOCUS WITH TEMPORAL EMPHASIS:
   * Keep responses detailed but focused (MAX 2000 tokens per response)
   * You have EXACTLY 2 turns in this debate - use them strategically
 - Focus on IT/Tech sector themes: digital transformation, AI/ML adoption, cloud migration, talent costs, client spending, regulatory impacts, etc.
+- AVOID: Portfolio allocation recommendations, investment advice, or specific buy/sell guidance
 - Format your response as a clear argument with supporting evidence, always emphasizing RECENT developments
 
 Remember: This is an intellectual debate about IT/Technology sector - be respectful but firm in your position."""
@@ -141,38 +143,57 @@ class MetaAgent:
     def _build_system_prompt(self) -> str:
         financial_context = self.data_loader.get_financial_context()
 
-        return f"""You are an ENHANCED META-ANALYST with stricter analytical standards, tasked with synthesizing multi-agent debate perspectives into a rigorous, evidence-based report.
+        return f"""You are a META-ANALYST tasked with synthesizing the dialectical debate between Growth Believer and Cynic into a comprehensive, evidence-based report on the Indian IT/Technology sector.
 
 AVAILABLE FINANCIAL DATA:
 {financial_context}
 
-Your enhanced mandate is to analyze the complete multi-agent debate transcript on the Indian IT/Technology sector with the following STRICT CRITERIA:
+**ANALYTICAL REQUIREMENTS:**
+1. **Sectoral Analysis**: Provide comprehensive assessment of Indian IT/Technology sector dynamics and outlook
+2. **Dialectical Synthesis**: Analyze the interaction between Growth Believer's optimistic case and Cynic's skeptical challenges
+3. **Business Fundamentals**: Assess revenue trends, margin dynamics, competitive positioning, and operational metrics
+4. **Risk Assessment**: Evaluate key sector risks, regulatory impacts, and structural challenges
+5. **Market Outlook**: Synthesize sector trajectory and key themes based on evidence presented
 
-**ANALYTICAL RIGOR REQUIREMENTS:**
-1. **TEMPORAL ANALYSIS PRIORITY**: Emphasize the recency and temporal relevance of all data points and arguments
-2. **EVIDENCE VALIDATION**: Verify all claims against provided financial data - flag unsupported assertions and note data recency
-3. **CHRONOLOGICAL COHERENCE**: Identify internal contradictions within each agent's arguments, especially temporal inconsistencies
-4. **CROSS-PERSPECTIVE SYNTHESIS**: Extract genuine insights that emerge from agent interactions, with focus on recent trends
-5. **REASONING QUALITY ASSESSMENT**: Evaluate the depth and quality of reasoning chains, prioritizing recent data usage
-6. **ACTIONABLE INTELLIGENCE**: Provide decision-ready insights with confidence intervals based on data recency
+**CRITICAL CONSTRAINTS:**
+- This is a SECTORAL ASSESSMENT REPORT, NOT investment advice
+- DO NOT include: buy/sell/hold recommendations, portfolio allocation advice, position sizing, or investment decisions
+- DO NOT include: decision frameworks, confidence assessments, or action tables
+- FOCUS ON: business fundamentals, industry trends, competitive dynamics, and market analysis
 
-**ENHANCED REPORT STRUCTURE:**
-# Multi-Agent Dialectical Analysis: Indian IT/Technology Sector - September 2025
+**REPORT STRUCTURE AND FORMATTING GUIDELINES:**
+
+# Sectoral Assessment Report: Indian IT/Technology Sector
 
 ## Executive Summary
-[Concise overview with key findings, confidence levels, and temporal context]
+[Clear, decisive overview of the sector's current state and outlook based on the debate]
 
-## Temporal Data Analysis
-[Assessment of data recency, time periods covered, and chronological relevance of arguments]
+## Core Thesis Confrontation
+### Growth Believer's Optimistic Case
+[Key growth arguments, structural drivers, and positive trends]
 
-## Agent Perspective Analysis
-[Detailed analysis of each agent's core arguments, evidence quality, reasoning depth, and temporal focus]
+### Cynic's Risk Assessment
+[Key concerns, structural challenges, and negative trends]
 
-## Evidence Verification Matrix
-[Fact-checking of key claims against available financial data with emphasis on data recency and temporal validity]
+### Dialectical Resolution
+[How the arguments interact, where they converge/diverge, and the balanced sectoral view]
 
-## Chronological Coherence Assessment
-[Evaluation of temporal consistency and time-based reasoning across all agents]
+## Sector Fundamentals Analysis
+[Revenue trends, margin dynamics, competitive positioning, and operational metrics]
+
+## Key Risk Factors
+[Regulatory impacts, technological disruption, competitive threats, and structural challenges]
+
+## Market Outlook and Trends
+[Sector trajectory, emerging themes, and key developments to monitor]
+
+**FORMATTING STANDARDS:**
+- Use **bold** only for section headers and key metrics
+- Use *italics* sparingly for emphasis on critical insights or contrarian points
+- Employ clear paragraph breaks and logical flow
+- Include quantitative data and trends where available
+- Maintain professional, analytical tone throughout
+- End with sector outlook summary, NOT investment recommendations
 
 ## Recent Trends Synthesis
 [Cross-perspective insights focused on latest developments and recent market dynamics]
@@ -254,15 +275,13 @@ MAINTAIN ENHANCED OBJECTIVITY: Apply rigorous fact-checking, demand evidence for
 SynthesisAgent = MetaAgent
 
 
-def load_optimized_persona(persona_type: Literal["calculative", "conservative", "disciplined",
-                                                "hybrid", "optimist", "pessimist",
-                                                "radical", "speculative"]) -> str:
-    """Load optimized persona prompt from markdown files"""
+def load_ethos_persona(persona_type: Literal["growth_believer", "cynic"]) -> str:
+    """Load ethos persona prompt from markdown files"""
     try:
-        file_path = Path(f"optimized_{persona_type}_prompt.md")
+        file_path = Path(f"ethos_{persona_type}_prompt.md")
         if not file_path.exists():
-            logger.warning(f"Optimized prompt file not found: {file_path}")
-            return f"You are a {persona_type} financial analyst focused on the Indian Banking sector."
+            logger.warning(f"Ethos prompt file not found: {file_path}")
+            return f"You are a {persona_type} financial analyst focused on the Indian IT/Technology sector."
 
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
@@ -290,15 +309,15 @@ def load_optimized_persona(persona_type: Literal["calculative", "conservative", 
             return '\n'.join(prompt_lines).strip()
         else:
             logger.warning(f"Could not extract prompt from {file_path}")
-            return f"You are a {persona_type} financial analyst focused on the Indian Banking sector."
+            return f"You are a {persona_type} financial analyst focused on the Indian IT/Technology sector."
 
     except Exception as e:
-        logger.error(f"Error loading optimized persona {persona_type}: {e}")
+        logger.error(f"Error loading ethos persona {persona_type}: {e}")
         return f"You are a {persona_type} financial analyst focused on the Indian Banking sector."
 
 
 class MultiAgentDebateSystem:
-    """Enhanced multi-agent debate system with 8 optimized personas"""
+    """Dialectical Agent System with 2 Ethos Personas: Growth Believer and Cynic"""
 
     def __init__(self, data_loader: FinancialDataLoader, model_config):
         self.data_loader = data_loader
@@ -306,29 +325,23 @@ class MultiAgentDebateSystem:
         self.agents: Dict[str, DebateAgent] = {}
         self.meta_agent = MetaAgent(model_config, data_loader)
 
-        # Initialize all 8 agents with optimized personas
+        # Initialize 2 ethos-based agents
         self._initialize_agents()
 
     def _initialize_agents(self):
-        """Initialize all 8 optimized persona agents"""
+        """Initialize 2 ethos-based persona agents"""
         persona_configs = [
-            ("Calculative Analyst", "calculative", "analytical"),
-            ("Conservative Investor", "conservative", "defensive"),
-            ("Disciplined Strategist", "disciplined", "systematic"),
-            ("Hybrid Tactician", "hybrid", "balanced"),
-            ("Growth Optimist", "optimist", "bullish"),
-            ("Risk Pessimist", "pessimist", "bearish"),
-            ("Radical Disruptor", "radical", "contrarian"),
-            ("Speculative Trader", "speculative", "opportunistic")
+            ("Growth Believer", "growth_believer", "bullish"),
+            ("Cynic", "cynic", "bearish")
         ]
 
         for name, persona_type, perspective in persona_configs:
             try:
-                system_prompt = load_optimized_persona(persona_type)
+                system_prompt = load_ethos_persona(persona_type)
 
                 agent_config = AgentConfig(
                     name=name,
-                    role=f"{persona_type.title()} Financial Analyst",
+                    role=f"{name} Analyst",
                     perspective=perspective,
                     model=self.model_config,
                     system_prompt=system_prompt,
@@ -342,50 +355,80 @@ class MultiAgentDebateSystem:
                 logger.error(f"Failed to initialize agent {name}: {e}")
 
     def run_debate_round(self, topic: str, max_rounds: int = 2) -> List[DebateMessage]:
-        """Run a structured debate with all agents"""
+        """Run a structured dialectical debate with direct agent-to-agent exchanges"""
         debate_messages = []
-        all_agent_names = list(self.agents.keys())
 
-        logger.info(f"Starting multi-agent debate with {len(all_agent_names)} agents")
+        # Get the two agents
+        growth_believer = self.agents.get("Growth Believer")
+        cynic = self.agents.get("Cynic")
 
-        for round_num in range(1, max_rounds + 1):
-            logger.info(f"Starting round {round_num}")
+        if not growth_believer or not cynic:
+            logger.error("Both Growth Believer and Cynic agents must be initialized")
+            return debate_messages
 
-            # Shuffle agent order for each round to ensure fairness
-            import random
-            round_agents = all_agent_names.copy()
-            random.shuffle(round_agents)
+        logger.info("Starting dialectical debate with direct agent-to-agent exchanges")
 
-            for agent_name in round_agents:
-                agent = self.agents[agent_name]
+        # Round 1: Opening statements
+        logger.info("Round 1: Opening statements")
 
-                # Check if agent has exceeded turn limit
-                if agent.turn_count >= agent.max_turns_per_agent:
-                    logger.info(f"Agent {agent_name} has reached maximum turns, skipping")
-                    continue
+        # Growth Believer opens
+        try:
+            response = growth_believer.respond(
+                debate_context=topic,
+                opponent_messages=None,
+                turn_number=1
+            )
+            debate_messages.append(response)
+            logger.info(f"Growth Believer presented opening statement")
+        except Exception as e:
+            logger.error(f"Error getting opening from Growth Believer: {e}")
 
-                try:
-                    # Get recent messages from other agents for context
-                    other_messages = [
-                        msg.content for msg in debate_messages[-6:]  # Last 6 messages for context
-                        if msg.agent_name != agent_name
-                    ]
+        # Cynic responds
+        try:
+            growth_message = [debate_messages[-1].content] if debate_messages else None
+            response = cynic.respond(
+                debate_context=topic,
+                opponent_messages=growth_message,
+                turn_number=2
+            )
+            debate_messages.append(response)
+            logger.info(f"Cynic presented opening statement")
+        except Exception as e:
+            logger.error(f"Error getting opening from Cynic: {e}")
 
-                    # Generate response
-                    response = agent.respond(
-                        debate_context=topic,
-                        opponent_messages=other_messages if other_messages else None,
-                        turn_number=len(debate_messages) + 1
-                    )
+        # Round 2: Targeted rebuttals (only if both agents have remaining turns)
+        if (growth_believer.turn_count < growth_believer.max_turns_per_agent and
+            cynic.turn_count < cynic.max_turns_per_agent and len(debate_messages) >= 2):
 
-                    debate_messages.append(response)
-                    logger.info(f"Agent {agent_name} contributed turn {response.turn_number}")
+            logger.info("Round 2: Targeted rebuttals")
 
-                except Exception as e:
-                    logger.error(f"Error getting response from {agent_name}: {e}")
-                    continue
+            # Growth Believer rebuttal
+            try:
+                cynic_messages = [msg.content for msg in debate_messages if msg.agent_name == "Cynic"]
+                response = growth_believer.respond(
+                    debate_context=topic,
+                    opponent_messages=cynic_messages,
+                    turn_number=len(debate_messages) + 1
+                )
+                debate_messages.append(response)
+                logger.info(f"Growth Believer presented rebuttal")
+            except Exception as e:
+                logger.error(f"Error getting rebuttal from Growth Believer: {e}")
 
-        logger.info(f"Debate completed with {len(debate_messages)} total messages")
+            # Cynic counter-rebuttal
+            try:
+                growth_messages = [msg.content for msg in debate_messages if msg.agent_name == "Growth Believer"]
+                response = cynic.respond(
+                    debate_context=topic,
+                    opponent_messages=growth_messages,
+                    turn_number=len(debate_messages) + 1
+                )
+                debate_messages.append(response)
+                logger.info(f"Cynic presented counter-rebuttal")
+            except Exception as e:
+                logger.error(f"Error getting counter-rebuttal from Cynic: {e}")
+
+        logger.info(f"Dialectical debate completed with {len(debate_messages)} exchanges")
         return debate_messages
 
     def generate_meta_analysis(self, debate_messages: List[DebateMessage]) -> str:

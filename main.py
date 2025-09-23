@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 from datetime import datetime
 import json
+from dotenv import load_dotenv
 
 from config import load_config, save_config
 from enhanced_orchestrator import EnhancedDebateOrchestrator
@@ -101,6 +102,9 @@ def save_results(result: dict, output_dir: str = "outputs"):
         print("Markdown files are still available")
 
 def main():
+    # Load environment variables from .env file
+    load_dotenv()
+
     print("DIALECTICAL AGENT SYSTEM")
     print("=" * 50)
 
