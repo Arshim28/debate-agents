@@ -13,4 +13,13 @@ dependencies = [
     "pydantic>=2.11.9",
     "markdown2>=2.4.0",
     "weasyprint>=60.0",
+    "pandas>=2.3.2",
+    "matplotlib>=3.10.6",
+    "seaborn>=0.13.2",
+    "youtube-transcript-api>=1.2.2",
+    "google-api-python-client>=2.182.0",
+    "mistralai>=1.9.10",
+    "chromadb>=1.1.0",
+    "google-genai>=1.38.0",
+    "instructor[google-genai]>=1.11.3",
 ]
