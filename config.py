@@ -7,12 +7,12 @@ class ModelConfig(BaseModel):
     provider: Literal["openai", "anthropic", "openrouter"] = "openrouter"
     model_name: str = "openrouter/deepseek/deepseek-r1"  # Updated for reasoning model
     temperature: float = 0.3  # Lower temperature for reasoning models
-    max_tokens: int = 400  # Reduced token limit as requested
+    max_tokens: int = 1000  # Increased token limit for detailed analysis
     api_key_env: str = "OPENROUTER_API_KEY"
     base_url: Optional[str] = "https://openrouter.ai/api/v1"
     # Reasoning effort controls for OpenRouter
-    reasoning_effort: Optional[str] = "medium"  # low, medium, high
-    max_reasoning_tokens: Optional[int] = 10000  # Control reasoning depth
+    reasoning_effort: Optional[str] = "high"  # low, medium, high
+    max_reasoning_tokens: Optional[int] = 15000  # Control reasoning depth
 
 class AgentConfig(BaseModel):
     name: str
@@ -43,10 +43,10 @@ class SystemConfig(BaseModel):
         base_model = ModelConfig(
             model_name="x-ai/grok-4-fast:free",  # Grok model for agents
             temperature=0.3,
-            max_tokens=400,
+            max_tokens=1000,
             api_key_env="OPENROUTER_API_KEY",
-            reasoning_effort="medium",  # Medium reasoning for agents
-            max_reasoning_tokens=8000
+            reasoning_effort="high",  # Very high reasoning for agents
+            max_reasoning_tokens=15000
         )
 
         return cls(
@@ -57,10 +57,10 @@ class SystemConfig(BaseModel):
             synthesis_agent=ModelConfig(
                 model_name="qwen/qwen3-next-80b-a3b-thinking",  # Qwen thinking model for meta-analysis
                 temperature=0.2,  # Even lower for meta-analysis
-                max_tokens=4000,  # 4k tokens as requested
+                max_tokens=16000,  # Increased for comprehensive reports
                 api_key_env="OPENROUTER_API_KEY",
                 reasoning_effort="high",  # High reasoning for meta-analysis
-                max_reasoning_tokens=15000
+                max_reasoning_tokens=20000
             ),
             debate=DebateConfig()
         )

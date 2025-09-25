@@ -1,6 +1,0 @@
-{
-  "status": "error",
-  "error": "'DebateAgent' object has no attribute 'turn_count'",
-  "debate_messages": [],
-  "meta_analysis": null
-}
