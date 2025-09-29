@@ -43,28 +43,39 @@ class DataManager:
 
         the response should only contain details of relevant tools
 
-        AVAILABLE TOOLS:
+        AVAILABLE TOOLS (PRIORITY ORDER):
 
-        Indices Tracker:
-        this is a tool that can be used to get the value of an index from a given start date to end date with a certain frequency. 
+        RAG (HIGHEST PRIORITY):
+        This contains proprietary research reports and financial analysis documents - USE THIS FIRST for any financial/IT sector queries.
         Arguments:
-        index_name: the name of the index to get the value of
-        start_date: the start date to get the value of the index
-        end_date: the end date to get the value of the index
-        frequency: the frequency to get the value of the index this can take the following values daily, weekly, monthly, quaterly, yearly
-
-        YouTube Connector:
-        This is a tool that can be used to get the transcript of youtube videos. Use this tool whenb the query is about interviews or commenatries or news etc.
-        Arguments:
-        query: the query to search for youtube videos
+        query: the query to search in proprietary research documents
 
         Jina Web Connector:
         This is a tool that can be used to get the web search results.
         Arguments:
         query: the query to search for web results
 
+        YouTube Connector:
+        This is a tool that can be used to get the transcript of youtube videos. Use this tool when the query is about interviews or commentaries or news etc.
+        Arguments:
+        query: the query to search for youtube videos
 
-        You can respond with multiple tools in the same query.
+        Indices Tracker:
+        this is a tool that can be used to get the value of an index from a given start date to end date with a certain frequency.
+        Arguments:
+        index_name: the name of the index to get the value of
+        start_date: the start date to get the value of the index
+        end_date: the end date to get the value of the index
+        frequency: the frequency to get the value of the index this can take the following values daily, weekly, monthly, quarterly, yearly
+
+        Index Comparison:
+        this is a tool to compare performance between two indices (like Nifty 50 vs Nifty IT) across multiple timeframes.
+        Arguments:
+        index1: the first index name (e.g., "Nifty 50")
+        index2: the second index name (e.g., "Nifty IT")
+        timeframes: list of timeframes to compare ['1w', '1m', '3m', '6m', '1y']
+
+        IMPORTANT: Always include RAG for financial sector queries. You can use multiple tools in the same query.
         """
         
         response = self.llm_client.chat.completions.create(
@@ -134,6 +145,8 @@ class DataManager:
             
             if tool_name_lower == "indices_tracker":
                 result[tool_name] = self.indices_connector.get_data(**tool_args)
+            elif tool_name_lower == "index_comparison":
+                result[tool_name] = self.indices_connector.compare_indices(**tool_args)
             elif tool_name_lower == "youtube_connector":
                 videos = self.youtube_connector.video_search(**tool_args)
                 filtered_videos = self.filter_youtube_videos(videos, query)
@@ -144,6 +157,9 @@ class DataManager:
                 result[tool_name] = transcript_dict
             elif tool_name_lower == "jina_web_connector":
                 result[tool_name] = self.jina_connector.search(**tool_args)
+            elif tool_name_lower == "rag":
+                # RAG is handled automatically below, skip here
+                pass
             else:
                 raise ValueError(f"Invalid tool name: {tool_name}")
         

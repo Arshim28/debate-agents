@@ -6,7 +6,7 @@ import json
 from dotenv import load_dotenv
 
 from config import load_config, save_config
-from enhanced_orchestrator import EnhancedDebateOrchestrator
+from advanced_orchestrator import AdvancedDebateOrchestrator
 from pdf_converter import MarkdownToPDFConverter
 
 def cleanup_old_files():
@@ -124,11 +124,10 @@ def main():
         print(f"Configuration loaded successfully")
         print(f"Topic: {config.debate.topic}")
         print(f"Max debate turns: {config.debate.max_debate_turns}")
-        print(f"Data directory: {config.debate.data_directory}")
 
-        # Initialize enhanced orchestrator
-        print("\nInitializing enhanced multi-agent debate orchestrator...")
-        orchestrator = EnhancedDebateOrchestrator(config)
+        # Initialize advanced orchestrator
+        print("\nInitializing advanced multi-agent debate orchestrator...")
+        orchestrator = AdvancedDebateOrchestrator(config)
 
         # Run debate
         print("\nStarting dialectical debate...")

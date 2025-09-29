@@ -7,7 +7,7 @@ class ModelConfig(BaseModel):
     provider: Literal["openai", "anthropic", "openrouter"] = "openrouter"
     model_name: str = "openrouter/deepseek/deepseek-r1"  # Updated for reasoning model
     temperature: float = 0.3  # Lower temperature for reasoning models
-    max_tokens: int = 1000  # Increased token limit for detailed analysis
+    max_tokens: int = 2000  # Doubled token limit for detailed analysis
     api_key_env: str = "OPENROUTER_API_KEY"
     base_url: Optional[str] = "https://openrouter.ai/api/v1"
     # Reasoning effort controls for OpenRouter
@@ -26,12 +26,11 @@ class DebateConfig(BaseModel):
     topic: str = "Indian IT/Technology Sector Analysis - September 2025"
     max_debate_turns: int = 2  # Reduced to 2 turns per agent max
     max_rounds: int = 2  # Maximum debate rounds
-    data_directory: str = "data_raw"
     output_directory: str = "outputs"
-    reasoning_depth: int = 3  # Enhanced reasoning depth for reasoning models
+    reasoning_depth: int = 3  # Advanced reasoning depth for reasoning models
 
 class SystemConfig(BaseModel):
-    # Legacy fields for backwards compatibility (not used in enhanced system)
+    # Legacy fields for backwards compatibility (not used in advanced system)
     bull_agent: Optional[AgentConfig] = None
     bear_agent: Optional[AgentConfig] = None
     orchestrator: ModelConfig
@@ -43,7 +42,7 @@ class SystemConfig(BaseModel):
         base_model = ModelConfig(
             model_name="x-ai/grok-4-fast:free",  # Grok model for agents
             temperature=0.3,
-            max_tokens=1000,
+            max_tokens=2000,  # Doubled from 1000 for detailed analysis
             api_key_env="OPENROUTER_API_KEY",
             reasoning_effort="high",  # Very high reasoning for agents
             max_reasoning_tokens=15000

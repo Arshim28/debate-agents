@@ -231,7 +231,7 @@ class NiftyIndicesTracker:
 
     def get_data(self, index_name, start_date, end_date, frequency="daily"):
         """
-        frequency: daily, weekly, monthly, quaterly, yearly
+        frequency: daily, weekly, monthly, quarterly, yearly
         """
         exact_name = self.find_index_name(index_name)
         if not exact_name:
@@ -239,10 +239,94 @@ class NiftyIndicesTracker:
         df = self.fetch_historical_data(exact_name, start_date, end_date)
         return self._process_data(df, frequency)
 
+    def compare_indices(self, index1: str, index2: str, timeframes: List[str]) -> Dict:
+        """
+        Compare performance between two indices across multiple timeframes
+
+        Args:
+            index1: First index name (e.g., "Nifty 50")
+            index2: Second index name (e.g., "Nifty IT")
+            timeframes: List of timeframes ['1w', '1m', '3m', '6m', '1y']
+
+        Returns:
+            Dictionary with comparative analysis
+        """
+        comparison_results = {}
+
+        for timeframe in timeframes:
+            try:
+                start_date, end_date = self.get_timeframe_dates(timeframe)
+
+                # Get data for both indices
+                data1 = self.get_data(index1, start_date, end_date)
+                data2 = self.get_data(index2, start_date, end_date)
+
+                if data1 and data2:
+                    # Calculate performance metrics
+                    values1 = list(data1.values())
+                    values2 = list(data2.values())
+
+                    if len(values1) >= 2 and len(values2) >= 2:
+                        # Calculate returns
+                        return1 = ((values1[-1] - values1[0]) / values1[0]) * 100
+                        return2 = ((values2[-1] - values2[0]) / values2[0]) * 100
+
+                        # Calculate volatility (std deviation of daily returns)
+                        if len(values1) > 1:
+                            daily_returns1 = [(values1[i] - values1[i-1]) / values1[i-1] * 100
+                                            for i in range(1, len(values1))]
+                            daily_returns2 = [(values2[i] - values2[i-1]) / values2[i-1] * 100
+                                            for i in range(1, len(values2))]
+
+                            vol1 = pd.Series(daily_returns1).std() if daily_returns1 else 0
+                            vol2 = pd.Series(daily_returns2).std() if daily_returns2 else 0
+                        else:
+                            vol1 = vol2 = 0
+
+                        comparison_results[timeframe] = {
+                            'period': timeframe,
+                            'start_date': start_date,
+                            'end_date': end_date,
+                            f'{index1}_return': round(return1, 2),
+                            f'{index2}_return': round(return2, 2),
+                            'outperformance': round(return2 - return1, 2),  # index2 vs index1
+                            f'{index1}_volatility': round(vol1, 2),
+                            f'{index2}_volatility': round(vol2, 2),
+                            f'{index1}_start': values1[0],
+                            f'{index1}_end': values1[-1],
+                            f'{index2}_start': values2[0],
+                            f'{index2}_end': values2[-1],
+                            'data_points': len(values1)
+                        }
+                    else:
+                        comparison_results[timeframe] = {
+                            'period': timeframe,
+                            'error': 'Insufficient data points for analysis'
+                        }
+                else:
+                    comparison_results[timeframe] = {
+                        'period': timeframe,
+                        'error': f'Data unavailable for {index1 if not data1 else index2}'
+                    }
+
+            except Exception as e:
+                comparison_results[timeframe] = {
+                    'period': timeframe,
+                    'error': str(e)
+                }
+
+        return comparison_results
+
     def _freq_selection(self, df, frequency):
+        if df is None:
+            return None
+
         if frequency == "daily":
             return df
-    
+
+        if 'Date' not in df.columns:
+            return None
+
         df_resampled = df.set_index('Date')
         min_date = df_resampled.index.min()
         max_date = df_resampled.index.max()
@@ -251,12 +335,12 @@ class NiftyIndicesTracker:
             result = df_resampled.resample('W').last()
         elif frequency == "monthly":
             result = df_resampled.resample('M').last()
-        elif frequency == "quaterly":
+        elif frequency == "quarterly":
             result = df_resampled.resample('QE').last()
         elif frequency == "yearly":
             result = df_resampled.resample('Y').last()
         else:
-            raise ValueError(f"Invalid frequency: {frequency}. Use 'daily', 'weekly', 'monthly', 'quaterly', or 'yearly'")
+            raise ValueError(f"Invalid frequency: {frequency}. Use 'daily', 'weekly', 'monthly', 'quarterly', or 'yearly'")
         
         result = result[(result.index >= min_date) & (result.index <= max_date)]
         result = result.dropna(how='all')
@@ -264,12 +348,18 @@ class NiftyIndicesTracker:
         return result
             
     def _process_data(self, df, frequency="daily"):
+        if df is None:
+            return None
+
         data_dict = {}
         processed_df = self._freq_selection(df, frequency)
+        if processed_df is None:
+            return None
+
         for i, row in processed_df.iterrows():
             data_dict[row['Date'].strftime('%d-%b-%Y')] = row['Close']
         return data_dict
 
 if __name__ == "__main__":
     tracker = NiftyIndicesTracker()
-    print(tracker.get_data("Nifty 50", "21-Jun-2024", "21-Jun-2025", "quaterly"))
+    print(tracker.get_data("Nifty 50", "21-Jun-2024", "21-Jun-2025", "quarterly"))
