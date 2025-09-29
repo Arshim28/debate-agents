@@ -1,61 +1,125 @@
-2025-09-23 16:44:23,464 - data_loader - INFO - Loaded document: doc_4.md
-2025-09-23 16:44:23,464 - data_loader - INFO - Loaded document: doc_6.md
-2025-09-23 16:44:23,464 - data_loader - INFO - Loaded document: doc_1.md
-2025-09-23 16:44:23,464 - data_loader - INFO - Loaded document: doc_2.md
-2025-09-23 16:44:23,464 - data_loader - INFO - Loaded document: doc_5.md
-2025-09-23 16:44:23,464 - data_loader - INFO - Loaded document: doc_9.md
-2025-09-23 16:44:23,465 - data_loader - INFO - Loaded document: doc_8.md
-2025-09-23 16:44:23,465 - data_loader - INFO - Loaded document: doc_7.md
-2025-09-23 16:44:23,465 - data_loader - INFO - Loaded document: doc_3.md
-2025-09-23 16:44:24,288 - agents - WARNING - Could not extract prompt from ethos_growth_believer_prompt.md
-2025-09-23 16:44:24,289 - agents - INFO - Initialized agent: Growth Believer
-2025-09-23 16:44:24,289 - agents - WARNING - Could not extract prompt from ethos_cynic_prompt.md
-2025-09-23 16:44:24,291 - agents - INFO - Initialized agent: Cynic
-2025-09-23 16:44:24,298 - enhanced_orchestrator - INFO - Dialectical Agent System initialized with 2 ethos personas
-2025-09-23 16:44:24,301 - enhanced_orchestrator - INFO - Initializing enhanced multi-agent debate
-2025-09-23 16:44:24,302 - enhanced_orchestrator - INFO - Conducting debate round 1
-2025-09-23 16:44:24,303 - agents - INFO - Starting dialectical debate with direct agent-to-agent exchanges
-2025-09-23 16:44:24,303 - agents - INFO - Round 1: Opening statements
-2025-09-23 16:44:25,017 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
-2025-09-23 16:44:34,549 - agents - INFO - Growth Believer generated response for turn 1
-2025-09-23 16:44:34,549 - agents - INFO - Growth Believer presented opening statement
-2025-09-23 16:44:35,501 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
-2025-09-23 16:44:46,169 - agents - INFO - Cynic generated response for turn 2
-2025-09-23 16:44:46,169 - agents - INFO - Cynic presented opening statement
-2025-09-23 16:44:46,169 - agents - INFO - Round 2: Targeted rebuttals
-2025-09-23 16:44:47,227 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
-2025-09-23 16:44:58,043 - agents - INFO - Growth Believer generated response for turn 3
-2025-09-23 16:44:58,043 - agents - INFO - Growth Believer presented rebuttal
-2025-09-23 16:44:59,169 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
-2025-09-23 16:45:07,730 - agents - INFO - Cynic generated response for turn 4
-2025-09-23 16:45:07,730 - agents - INFO - Cynic presented counter-rebuttal
-2025-09-23 16:45:07,730 - agents - INFO - Dialectical debate completed with 4 exchanges
-2025-09-23 16:45:07,730 - enhanced_orchestrator - INFO - Continuing debate - round 2 of 2
-2025-09-23 16:45:07,731 - enhanced_orchestrator - INFO - Evaluating debate progress after round 1
-2025-09-23 16:45:07,732 - enhanced_orchestrator - INFO - Growth Believer: 0/2 turns
-2025-09-23 16:45:07,732 - enhanced_orchestrator - INFO - Cynic: 0/2 turns
-2025-09-23 16:45:07,732 - enhanced_orchestrator - INFO - Total messages so far: 4
-2025-09-23 16:45:07,733 - enhanced_orchestrator - INFO - Conducting debate round 2
-2025-09-23 16:45:07,734 - agents - INFO - Starting dialectical debate with direct agent-to-agent exchanges
-2025-09-23 16:45:07,734 - agents - INFO - Round 1: Opening statements
-2025-09-23 16:45:09,607 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
-2025-09-23 16:45:20,236 - agents - INFO - Growth Believer generated response for turn 1
-2025-09-23 16:45:20,236 - agents - INFO - Growth Believer presented opening statement
-2025-09-23 16:45:21,991 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
-2025-09-23 16:45:30,085 - agents - INFO - Cynic generated response for turn 2
-2025-09-23 16:45:30,085 - agents - INFO - Cynic presented opening statement
-2025-09-23 16:45:30,085 - agents - INFO - Round 2: Targeted rebuttals
-2025-09-23 16:45:31,954 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
-2025-09-23 16:45:39,634 - agents - INFO - Growth Believer generated response for turn 3
-2025-09-23 16:45:39,634 - agents - INFO - Growth Believer presented rebuttal
-2025-09-23 16:45:41,154 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
-2025-09-23 16:45:52,201 - agents - INFO - Cynic generated response for turn 4
-2025-09-23 16:45:52,201 - agents - INFO - Cynic presented counter-rebuttal
-2025-09-23 16:45:52,201 - agents - INFO - Dialectical debate completed with 4 exchanges
-2025-09-23 16:45:52,201 - enhanced_orchestrator - INFO - Debate complete after 2 rounds
-2025-09-23 16:45:52,202 - enhanced_orchestrator - INFO - Generating enhanced meta-analysis
-2025-09-23 16:45:55,754 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
-2025-09-23 16:46:26,961 - agents - INFO - Enhanced meta-analysis report generated successfully
-2025-09-23 16:46:26,963 - enhanced_orchestrator - INFO - Enhanced multi-agent debate completed successfully
-2025-09-23 16:46:28,056 - pdf_converter - INFO - Successfully converted outputs/debate_transcript_20250923_164626.md to outputs/debate_transcript_20250923_164626.pdf
-2025-09-23 16:46:28,056 - pdf_converter - INFO - Debate transcript converted to PDF: outputs/debate_transcript_20250923_164626.pdf
+2025-09-29 13:41:04,993 - googleapiclient.discovery_cache - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-09-29 13:41:05,014 - chromadb.telemetry.product.posthog - INFO - Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+2025-09-29 13:41:05,210 - intelligent_data_loader - INFO - Intelligent data loader initialized with multi-modal connectors
+2025-09-29 13:41:05,587 - intelligent_data_loader - INFO - Fetching multi-source intelligence for IT sector context
+2025-09-29 13:41:06,335 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:41:44,878 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:41:45,977 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:41:46,026 - agents - INFO - Initialized agent: Growth Believer
+2025-09-29 13:41:46,027 - agents - INFO - Initialized agent: Cynic
+2025-09-29 13:41:46,027 - intelligent_data_loader - INFO - Fetching multi-source intelligence for IT sector context
+2025-09-29 13:41:46,963 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:42:00,246 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:42:01,412 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:42:01,438 - advanced_orchestrator - INFO - Dialectical Agent System initialized with 2 ethos personas
+2025-09-29 13:42:01,442 - advanced_orchestrator - INFO - Initializing advanced multi-agent debate
+2025-09-29 13:42:01,443 - advanced_orchestrator - INFO - Conducting debate round 1
+2025-09-29 13:42:01,443 - agents - INFO - Starting dialectical debate with direct agent-to-agent exchanges
+2025-09-29 13:42:01,443 - agents - INFO - Round 1: Opening statements
+2025-09-29 13:42:01,444 - agents - INFO - Growth Believer starting 2-phase response generation...
+2025-09-29 13:42:01,444 - agents - INFO - Growth Believer Phase 1: Executing mandatory data queries...
+2025-09-29 13:42:02,722 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:42:24,192 - agents - INFO - Growth Believer generated 3 dynamic queries
+2025-09-29 13:42:24,193 - agents - INFO - Growth Believer executing dynamic query 1/3: Indian IT sector revenue growth and margin expansi...
+2025-09-29 13:42:26,193 - intelligent_data_loader - INFO - Fetching multi-source intelligence for IT sector context
+2025-09-29 13:42:27,231 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:43:03,799 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:43:05,046 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:43:05,052 - agents - INFO - Growth Believer executing dynamic query 2/3: Recent government policies on digital transformati...
+2025-09-29 13:43:07,053 - intelligent_data_loader - INFO - Fetching multi-source intelligence for IT sector context
+2025-09-29 13:43:07,852 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:43:34,073 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:43:34,473 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:43:34,492 - agents - INFO - Growth Believer executing dynamic query 3/3: Global cloud migration trends and regulatory easin...
+2025-09-29 13:43:36,493 - intelligent_data_loader - INFO - Fetching multi-source intelligence for IT sector context
+2025-09-29 13:43:37,403 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:44:19,273 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:44:20,396 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:44:20,417 - agents - INFO - Growth Believer completed 3/3 queries successfully
+2025-09-29 13:44:20,417 - agents - INFO - Growth Believer Phase 2: Generating informed response with fresh data...
+2025-09-29 13:44:21,416 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:44:40,844 - agents - INFO - Growth Believer generated data-driven response for turn 1 using fresh market intelligence
+2025-09-29 13:44:40,845 - agents - INFO - Growth Believer presented opening statement
+2025-09-29 13:44:40,845 - agents - INFO - Cynic starting 2-phase response generation...
+2025-09-29 13:44:40,845 - agents - INFO - Cynic Phase 1: Executing mandatory data queries...
+2025-09-29 13:44:41,989 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:45:40,085 - agents - INFO - Cynic generated 3 dynamic queries
+2025-09-29 13:45:40,086 - agents - INFO - Cynic executing dynamic query 1/3: Indian IT sector revenue growth revisions in propr...
+2025-09-29 13:45:42,086 - intelligent_data_loader - INFO - Fetching multi-source intelligence for IT sector context
+2025-09-29 13:45:43,116 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:47:24,392 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:47:25,543 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:47:25,566 - agents - INFO - Cynic executing dynamic query 2/3: Government AI policies implementation delays and r...
+2025-09-29 13:47:27,567 - intelligent_data_loader - INFO - Fetching multi-source intelligence for IT sector context
+2025-09-29 13:47:28,620 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:49:05,956 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:49:06,434 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:49:06,440 - agents - INFO - Cynic executing dynamic query 3/3: Global economic headwinds impacting client spendin...
+2025-09-29 13:49:08,441 - intelligent_data_loader - INFO - Fetching multi-source intelligence for IT sector context
+2025-09-29 13:49:09,361 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:49:35,132 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:49:36,240 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:49:36,255 - agents - INFO - Cynic completed 3/3 queries successfully
+2025-09-29 13:49:36,255 - agents - INFO - Cynic Phase 2: Generating informed response with fresh data...
+2025-09-29 13:49:37,231 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:50:15,114 - agents - INFO - Cynic generated data-driven response for turn 2 using fresh market intelligence
+2025-09-29 13:50:15,115 - agents - INFO - Cynic presented opening statement
+2025-09-29 13:50:15,115 - agents - INFO - Round 2: Targeted rebuttals
+2025-09-29 13:50:15,115 - agents - INFO - Growth Believer starting 2-phase response generation...
+2025-09-29 13:50:15,115 - agents - INFO - Growth Believer Phase 1: Executing mandatory data queries...
+2025-09-29 13:50:16,179 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:50:31,745 - agents - INFO - Growth Believer generated 3 dynamic queries
+2025-09-29 13:50:31,745 - agents - INFO - Growth Believer executing dynamic query 1/3: Indian IT sector revenue growth forecasts H1 FY26 ...
+2025-09-29 13:50:33,746 - intelligent_data_loader - INFO - Fetching multi-source intelligence for IT sector context
+2025-09-29 13:50:34,692 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:50:49,156 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:50:49,665 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:50:49,671 - agents - INFO - Growth Believer executing dynamic query 2/3: Government AI/ML policies implementation impacts Q...
+2025-09-29 13:50:51,672 - intelligent_data_loader - INFO - Fetching multi-source intelligence for IT sector context
+2025-09-29 13:50:52,585 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:51:16,619 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:51:17,740 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:51:17,755 - agents - INFO - Growth Believer executing dynamic query 3/3: Cloud migration regulatory easing under DPDP Act H...
+2025-09-29 13:51:19,756 - intelligent_data_loader - INFO - Fetching multi-source intelligence for IT sector context
+2025-09-29 13:51:20,899 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:51:56,261 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:51:56,672 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:51:56,693 - agents - INFO - Growth Believer completed 3/3 queries successfully
+2025-09-29 13:51:56,693 - agents - INFO - Growth Believer Phase 2: Generating informed response with fresh data...
+2025-09-29 13:51:57,627 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:52:40,457 - agents - INFO - Growth Believer generated data-driven response for turn 3 using fresh market intelligence
+2025-09-29 13:52:40,457 - agents - INFO - Growth Believer presented rebuttal
+2025-09-29 13:52:40,457 - agents - INFO - Cynic starting 2-phase response generation...
+2025-09-29 13:52:40,457 - agents - INFO - Cynic Phase 1: Executing mandatory data queries...
+2025-09-29 13:52:41,482 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:52:52,924 - agents - INFO - Cynic generated 3 dynamic queries
+2025-09-29 13:52:52,924 - agents - INFO - Cynic executing dynamic query 1/3: Indian IT sector revenue growth slowdowns and marg...
+2025-09-29 13:52:54,925 - intelligent_data_loader - INFO - Fetching multi-source intelligence for IT sector context
+2025-09-29 13:52:56,190 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:53:30,090 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:53:30,507 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:53:30,524 - agents - INFO - Cynic executing dynamic query 2/3: Challenges in AI/ML adoption due to H1 FY26 govern...
+2025-09-29 13:53:32,525 - intelligent_data_loader - INFO - Fetching multi-source intelligence for IT sector context
+2025-09-29 13:53:33,521 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:53:43,481 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:53:44,669 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:53:44,685 - agents - INFO - Cynic executing dynamic query 3/3: Global client spending retrenchment effects on Ind...
+2025-09-29 13:53:46,685 - intelligent_data_loader - INFO - Fetching multi-source intelligence for IT sector context
+2025-09-29 13:53:47,686 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:54:26,689 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:54:27,824 - httpx - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:batchEmbedContents "HTTP/1.1 200 OK"
+2025-09-29 13:54:27,849 - agents - INFO - Cynic completed 3/3 queries successfully
+2025-09-29 13:54:27,849 - agents - INFO - Cynic Phase 2: Generating informed response with fresh data...
+2025-09-29 13:54:28,841 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:55:22,143 - agents - INFO - Cynic generated data-driven response for turn 4 using fresh market intelligence
+2025-09-29 13:55:22,144 - agents - INFO - Cynic presented counter-rebuttal
+2025-09-29 13:55:22,144 - agents - INFO - Dialectical debate completed with 4 exchanges
+2025-09-29 13:55:22,144 - advanced_orchestrator - INFO - All agents have reached maximum turns
+2025-09-29 13:55:22,145 - advanced_orchestrator - INFO - Generating advanced meta-analysis
+2025-09-29 13:55:24,441 - httpx - INFO - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-09-29 13:56:00,107 - agents - INFO - Comprehensive meta-analysis report generated successfully
+2025-09-29 13:56:00,109 - advanced_orchestrator - INFO - Advanced multi-agent debate completed successfully
+2025-09-29 13:56:00,924 - pdf_converter - INFO - Successfully converted outputs/debate_transcript_20250929_135600.md to outputs/debate_transcript_20250929_135600.pdf
+2025-09-29 13:56:00,924 - pdf_converter - INFO - Debate transcript converted to PDF: outputs/debate_transcript_20250929_135600.pdf
+2025-09-29 13:56:01,611 - pdf_converter - INFO - Successfully converted outputs/synthesis_report_20250929_135600.md to outputs/synthesis_report_20250929_135600.pdf
+2025-09-29 13:56:01,611 - pdf_converter - INFO - Synthesis report converted to PDF: outputs/synthesis_report_20250929_135600.pdf

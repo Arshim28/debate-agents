@@ -7,11 +7,11 @@ import logging
 
 from agents import DebateAgent, MetaAgent, DebateMessage, MultiAgentDebateSystem
 from config import SystemConfig, ModelConfig
-from data_loader import FinancialDataLoader
+from intelligent_data_loader import IntelligentFinancialDataLoader
 
 logger = logging.getLogger(__name__)
 
-class EnhancedDebateState(TypedDict):
+class AdvancedDebateState(TypedDict):
     debate_messages: List[DebateMessage]
     current_round: int
     max_rounds: int
@@ -22,24 +22,24 @@ class EnhancedDebateState(TypedDict):
     agent_stats: Dict[str, Dict[str, Any]]
     reasoning_depth: int
 
-class EnhancedDebateOrchestrator:
-    """Enhanced orchestrator for multi-agent debates with reasoning models"""
+class AdvancedDebateOrchestrator:
+    """Advanced orchestrator for multi-agent debates with reasoning models"""
 
     def __init__(self, config: SystemConfig):
         self.config = config
-        self.data_loader = FinancialDataLoader(config.debate.data_directory)
+        self.data_loader = IntelligentFinancialDataLoader()
 
         # Create agent-specific model config (Grok with very high reasoning)
         agent_model_config = ModelConfig(
             model_name="x-ai/grok-4-fast:free",
             temperature=0.3,
-            max_tokens=1000,  # 1k tokens for detailed analysis
+            max_tokens=2000,  # 2k tokens for detailed analysis (doubled from 1k)
             api_key_env="OPENROUTER_API_KEY",
             reasoning_effort="high",
             max_reasoning_tokens=15000
         )
 
-        # Initialize enhanced multi-agent system with agent-specific config
+        # Initialize advanced multi-agent system with agent-specific config
         self.debate_system = MultiAgentDebateSystem(
             self.data_loader,
             agent_model_config
@@ -47,16 +47,16 @@ class EnhancedDebateOrchestrator:
 
         self.meta_agent = MetaAgent(config.synthesis_agent, self.data_loader)
 
-        # Create the enhanced debate graph
+        # Create the advanced debate graph
         self.checkpointer = MemorySaver()
-        self.graph = self._build_enhanced_graph()
+        self.graph = self._build_advanced_graph()
 
         logger.info("Dialectical Agent System initialized with 2 ethos personas")
 
-    def _build_enhanced_graph(self) -> StateGraph:
-        graph = StateGraph(EnhancedDebateState)
+    def _build_advanced_graph(self) -> StateGraph:
+        graph = StateGraph(AdvancedDebateState)
 
-        # Add nodes for enhanced multi-agent flow
+        # Add nodes for advanced multi-agent flow
         graph.add_node("initialize_debate", self._initialize_debate_node)
         graph.add_node("conduct_round", self._conduct_round_node)
         graph.add_node("evaluate_progress", self._evaluate_progress_node)
@@ -69,7 +69,7 @@ class EnhancedDebateOrchestrator:
         # Conditional edge for continuing or finishing
         graph.add_conditional_edges(
             "conduct_round",
-            self._should_continue_enhanced_debate,
+            self._should_continue_advanced_debate,
             {
                 "continue": "evaluate_progress",
                 "complete": "meta_analyze"
@@ -81,8 +81,8 @@ class EnhancedDebateOrchestrator:
 
         return graph.compile(checkpointer=self.checkpointer)
 
-    def _initialize_debate_node(self, state: EnhancedDebateState) -> EnhancedDebateState:
-        logger.info("Initializing enhanced multi-agent debate")
+    def _initialize_debate_node(self, state: AdvancedDebateState) -> AdvancedDebateState:
+        logger.info("Initializing advanced multi-agent debate")
 
         return {
             **state,
@@ -94,14 +94,14 @@ class EnhancedDebateOrchestrator:
             "debate_messages": [],
             "meta_analysis": None,
             "agent_stats": {},
-            "reasoning_depth": 3  # Enhanced reasoning for reasoning models
+            "reasoning_depth": 3  # Advanced reasoning for reasoning models
         }
 
-    def _conduct_round_node(self, state: EnhancedDebateState) -> EnhancedDebateState:
+    def _conduct_round_node(self, state: AdvancedDebateState) -> AdvancedDebateState:
         logger.info(f"Conducting debate round {state['current_round']}")
 
-        # Enhanced topic with explicit IT/Tech sector guidance and recency emphasis
-        enhanced_topic = f"""{state['topic']} - Focus strictly on Indian IT/Technology sector companies, market dynamics, and financial performance.
+        # Advanced topic with explicit IT/Tech sector guidance and recency emphasis
+        advanced_topic = f"""{state['topic']} - Focus strictly on Indian IT/Technology sector companies, market dynamics, and financial performance.
 
         CRITICAL TEMPORAL FOCUS:
         - PRIORITIZE RECENT DATA: Emphasize the most recent financial results, quarterly reports, and market developments
@@ -114,7 +114,7 @@ class EnhancedDebateOrchestrator:
 
         # Run a complete round with all agents
         round_messages = self.debate_system.run_debate_round(
-            topic=enhanced_topic,
+            topic=advanced_topic,
             max_rounds=1  # One round at a time
         )
 
@@ -129,7 +129,7 @@ class EnhancedDebateOrchestrator:
             "agent_stats": updated_stats
         }
 
-    def _evaluate_progress_node(self, state: EnhancedDebateState) -> EnhancedDebateState:
+    def _evaluate_progress_node(self, state: AdvancedDebateState) -> AdvancedDebateState:
         logger.info(f"Evaluating debate progress after round {state['current_round'] - 1}")
 
         # Log current statistics
@@ -142,7 +142,7 @@ class EnhancedDebateOrchestrator:
 
         return state
 
-    def _should_continue_enhanced_debate(self, state: EnhancedDebateState) -> str:
+    def _should_continue_advanced_debate(self, state: AdvancedDebateState) -> str:
         # Check if we've completed the maximum rounds
         if state["current_round"] > state["max_rounds"]:
             logger.info(f"Debate complete after {state['current_round'] - 1} rounds")
@@ -161,8 +161,8 @@ class EnhancedDebateOrchestrator:
         logger.info(f"Continuing debate - round {state['current_round']} of {state['max_rounds']}")
         return "continue"
 
-    def _meta_analyze_node(self, state: EnhancedDebateState) -> EnhancedDebateState:
-        logger.info("Generating enhanced meta-analysis")
+    def _meta_analyze_node(self, state: AdvancedDebateState) -> AdvancedDebateState:
+        logger.info("Generating advanced meta-analysis")
 
         meta_analysis = self.meta_agent.synthesize(state["debate_messages"])
 
@@ -172,10 +172,10 @@ class EnhancedDebateOrchestrator:
             "is_complete": True
         }
 
-    def run_enhanced_debate(self, thread_id: str = "enhanced_debate_thread") -> Dict[str, Any]:
+    def run_advanced_debate(self, thread_id: str = "advanced_debate_thread") -> Dict[str, Any]:
         try:
             # Initial state
-            initial_state: EnhancedDebateState = {
+            initial_state: AdvancedDebateState = {
                 "debate_messages": [],
                 "current_round": 0,
                 "max_rounds": 2,
@@ -187,16 +187,16 @@ class EnhancedDebateOrchestrator:
                 "reasoning_depth": 3
             }
 
-            # Run the enhanced debate
+            # Run the advanced debate
             config = {"configurable": {"thread_id": thread_id}}
             final_state = self.graph.invoke(initial_state, config)
 
-            logger.info("Enhanced multi-agent debate completed successfully")
+            logger.info("Advanced multi-agent debate completed successfully")
 
             return {
                 "status": "completed",
                 "debate_messages": final_state["debate_messages"],
-                "meta_analysis": final_state["meta_analysis"],
+                "synthesis_report": final_state["meta_analysis"],
                 "total_messages": len(final_state["debate_messages"]),
                 "total_rounds": final_state["current_round"] - 1,
                 "agent_stats": final_state["agent_stats"],
@@ -204,24 +204,24 @@ class EnhancedDebateOrchestrator:
             }
 
         except Exception as e:
-            logger.error(f"Error running enhanced debate: {e}")
+            logger.error(f"Error running advanced debate: {e}")
             return {
                 "status": "error",
                 "error": str(e),
                 "debate_messages": [],
-                "meta_analysis": None
+                "synthesis_report": None
             }
 
     # Legacy method for backwards compatibility
     def run_debate(self, thread_id: str = "debate_thread") -> Dict[str, Any]:
-        return self.run_enhanced_debate(thread_id)
+        return self.run_advanced_debate(thread_id)
 
     def get_debate_summary(self, result: Dict[str, Any]) -> str:
         if result["status"] == "error":
-            return f"Enhanced debate failed with error: {result['error']}"
+            return f"Advanced debate failed with error: {result['error']}"
 
         summary_parts = [
-            f"ENHANCED MULTI-AGENT DEBATE SUMMARY",
+            f"ADVANCED MULTI-AGENT DEBATE SUMMARY",
             "=" * 80,
             f"Topic: {result.get('topic', 'Unknown')}",
             f"Total Messages: {result.get('total_messages', 0)}",
@@ -253,11 +253,11 @@ class EnhancedDebateOrchestrator:
             summary_parts.append("")
 
         summary_parts.extend([
-            "META-ANALYSIS GENERATED: " + ("Yes" if result.get("meta_analysis") else "No"),
+            "META-ANALYSIS GENERATED: " + ("Yes" if result.get("synthesis_report") else "No"),
             ""
         ])
 
         return "\n".join(summary_parts)
 
 # Alias for backwards compatibility
-DialecticalDebateOrchestrator = EnhancedDebateOrchestrator
+DialecticalDebateOrchestrator = AdvancedDebateOrchestrator

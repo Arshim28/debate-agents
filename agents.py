@@ -8,7 +8,8 @@ import logging
 from pathlib import Path
 
 from config import AgentConfig, get_llm_from_config
-from data_loader import FinancialDataLoader
+from intelligent_data_loader import IntelligentFinancialDataLoader
+from date_utils import get_current_financial_context, get_previous_quarters
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +21,7 @@ class DebateMessage(BaseModel):
     timestamp: str = Field(default_factory=lambda: str(__import__('datetime').datetime.now()))
 
 class DebateAgent:
-    def __init__(self, config: AgentConfig, data_loader: FinancialDataLoader):
+    def __init__(self, config: AgentConfig, data_loader: IntelligentFinancialDataLoader):
         self.config = config
         self.data_loader = data_loader
         self.llm = get_llm_from_config(config.model)
@@ -38,39 +39,164 @@ class DebateAgent:
         # Create the chain
         self.chain = self.prompt | self.llm
 
+    def _formulate_and_execute_queries(self, debate_context: str, opponent_messages: Optional[List[str]] = None, turn_number: int = 1) -> str:
+        """
+        MISSION CRITICAL: Dynamically query data connectors for current market intelligence.
+        NO FALLBACKS - Must succeed with all 3 queries or fail clearly.
+        """
+        # Get dynamic financial context
+        fin_context = get_current_financial_context()
+
+        # Dynamic query formulation - NO FALLBACKS, will raise if fails
+        base_queries = self._generate_dynamic_queries(debate_context, opponent_messages, turn_number)
+
+        # Execute queries and gather fresh intelligence
+        fresh_intelligence_parts = [
+            "FRESH MARKET INTELLIGENCE - DYNAMIC DATA GATHERING:",
+            "=" * 70,
+            f"Query Execution Time: {fin_context['current_date_str']} {fin_context['current_date'].strftime('%H:%M:%S')}",
+            f"Agent Perspective: {self.config.perspective.upper()}",
+            f"Financial Context: {fin_context['quarter_period']}",
+            f"Turn Number: {turn_number}",
+            f"Dynamic Queries: {len(base_queries)}/3",
+            "",
+            "REAL-TIME DATA SOURCES:",
+            "=" * 30
+        ]
+
+        successful_queries = 0
+
+        # Execute all 3 dynamic queries with throttling - Continue on errors but track them
+        for i, query in enumerate(base_queries, 1):
+            logger.info(f"{self.config.name} executing dynamic query {i}/3: {query[:50]}...")
+
+            # Add throttling delay to prevent API overload
+            import time
+            time.sleep(2)  # 2-second delay to prevent rate limiting
+
+            try:
+                # Get multi-source intelligence
+                query_result = self.data_loader.get_intelligent_context(query)
+
+                if query_result and len(query_result.strip()) >= 50:
+                    fresh_intelligence_parts.extend([
+                        f"\n🔍 DYNAMIC QUERY {i}: {query}",
+                        "-" * 50,
+                        query_result[:1000] + "..." if len(query_result) > 1000 else query_result,
+                        "",
+                        "=" * 70,
+                        ""
+                    ])
+                    successful_queries += 1
+                else:
+                    logger.warning(f"Query {i} returned insufficient data: {len(query_result) if query_result else 0} characters")
+                    fresh_intelligence_parts.extend([
+                        f"\n⚠️ QUERY {i} - INSUFFICIENT DATA: {query}",
+                        "-" * 50,
+                        "Data source returned insufficient information for this query.",
+                        "",
+                        "=" * 70,
+                        ""
+                    ])
+
+            except Exception as e:
+                logger.warning(f"Query {i} failed: {e}")
+                fresh_intelligence_parts.extend([
+                    f"\n❌ QUERY {i} - DATA UNAVAILABLE: {query}",
+                    "-" * 50,
+                    f"Data source error: {str(e)[:100]}",
+                    "",
+                    "=" * 70,
+                    ""
+                ])
+
+        fresh_intelligence = "\n".join(fresh_intelligence_parts)
+
+        # Log success rate but continue regardless
+        logger.info(f"{self.config.name} completed {successful_queries}/3 queries successfully")
+        return fresh_intelligence
+
+
     def _build_system_prompt(self) -> str:
-        financial_context = self.data_loader.get_financial_context()
+        # Get dynamic financial context
+        fin_context = get_current_financial_context()
+        prev_quarters = get_previous_quarters(fin_context, 3)
 
         return f"""{self.config.system_prompt}
 
-AVAILABLE FINANCIAL DATA:
-{financial_context}
+🚨 MISSION CRITICAL DATA MANDATE:
+You are a {self.config.perspective.upper()} analyst with MANDATORY access to FRESH MARKET INTELLIGENCE.
+Before each response, you will receive REAL-TIME data queries executed specifically for this debate turn.
 
-DEBATE INSTRUCTIONS - IT/TECHNOLOGY SECTOR FOCUS WITH TEMPORAL EMPHASIS:
-- You are participating in a structured multi-agent debate forum about the Indian IT/Technology sector
+📅 CURRENT FINANCIAL CONTEXT:
+• Date: {fin_context['current_date_str']}
+• Financial Year: {fin_context['financial_year_full']}
+• Current Quarter: {fin_context['quarter_period']}
+• Previous Quarters: {', '.join(prev_quarters)}
+• Half Year: {fin_context['half_year_full']}
+
+⚠️  ABSOLUTE PROHIBITION: DO NOT use training data, general knowledge, or outdated information.
+✅ MANDATORY REQUIREMENT: Use ONLY the fresh market intelligence provided in each prompt.
+
+📊 MULTI-MODAL INTELLIGENCE SOURCES:
+• ChromaDB RAG System: Proprietary research documents (HIGHEST PRIORITY)
+• Jina Web Search: Real-time market intelligence
+• YouTube Connector: Expert interviews and commentary
+• Market Indices: Live financial data (when available)
+
+🎯 DEBATE INSTRUCTIONS - FRESH DATA DRIVEN ANALYSIS:
+- You are participating in a structured multi-agent debate about the Indian IT/Technology sector
 - SECTOR FOCUS: Keep ALL discussions centered on IT/Technology companies, trends, and market dynamics
-- ANALYTICAL FOCUS: This is a sectoral assessment, NOT investment advice - focus on business fundamentals, industry trends, and competitive dynamics
-- TEMPORAL FOCUS (CRITICAL):
-  * PRIORITIZE RECENT DATA: Always lead with the most recent financial results, quarterly reports, and market developments
-  * DATE SPECIFICITY: Reference exact time periods, quarters (Q1/Q2/Q3/Q4 FY25), months, and recent events
-  * RECENCY WEIGHTING: Give higher analytical weight to latest data vs. older historical information
-  * TREND ANALYSIS: Emphasize quarter-over-quarter (QoQ), year-over-year (YoY) changes and recent trajectories
-  * CURRENT RELEVANCE: Frame all arguments within the current market context and recent industry shifts
-- This is a reasoning-heavy environment - think step by step before presenting conclusions
-- Present your arguments clearly with supporting evidence from the provided data
-- Directly address and counter opposing viewpoints when they are presented
-- Maintain your {self.config.perspective.upper()} perspective throughout the debate
-- Use specific metrics, figures, and examples from the IT/Tech financial documents
-- CRITICAL CONSTRAINTS:
-  * Keep responses detailed but focused (MAX 2000 tokens per response)
-  * You have EXACTLY 2 turns in this debate - use them strategically
-- Focus on IT/Tech sector themes: digital transformation, AI/ML adoption, cloud migration, talent costs, client spending, regulatory impacts, etc.
-- AVOID: Portfolio allocation recommendations, investment advice, or specific buy/sell guidance
-- Format your response as a clear argument with supporting evidence, always emphasizing RECENT developments
+- ANALYTICAL FOCUS: This is a sectoral assessment, NOT investment advice - focus on business fundamentals
 
-Remember: This is an intellectual debate about IT/Technology sector - be respectful but firm in your position."""
+🔥 FRESH DATA ENFORCEMENT (MISSION CRITICAL):
+  * ZERO TOLERANCE for training data usage - use ONLY fresh intelligence provided
+  * MANDATORY DATE CITATIONS: Every claim must include 'as of [specific date]' from fresh data
+  * QUERY-DRIVEN RESPONSES: Base arguments exclusively on the real-time queries executed for you
+  * SOURCE VALIDATION: Reference specific data sources (RAG documents, web search, market indices)
+  * RECENCY VERIFICATION: Only cite {fin_context['quarter_full']}, {prev_quarters[0]}, {fin_context['half_year_full']} data
+  * TEMPORAL PRECISION: Use exact dates, quarters, and timeframes from fresh intelligence
+
+📊 RESPONSE CONSTRUCTION PROTOCOL:
+1. Start with fresh data analysis from the provided intelligence
+2. Cite specific metrics with exact dates and sources
+3. Build arguments using only current market developments
+4. Counter opponents with recent data contradictions
+5. Maintain your {self.config.perspective.upper()} perspective using fresh evidence
+
+🔒 CRITICAL CONSTRAINTS:
+  * MAX 2000 tokens per response - use them strategically
+  * EXACTLY 2 turns in this debate
+  * Fresh data citations MANDATORY for every factual claim
+  * Focus on current {fin_context['financial_year_str']} developments
+
+🎪 SECTOR THEMES (Using Fresh Data Only):
+- Indian IT sector performance vs broader market (Nifty IT vs Nifty 50)
+- Local industry dynamics: revenue patterns, margin pressures, client concentration
+- Sector-specific regulatory changes affecting operations and costs
+- Technology disruption within Indian IT services landscape
+- Competitive positioning among Indian IT companies
+- Skills availability and wage inflation in local talent market
+- Government policy impact on domestic IT sector growth
+- Quarterly earnings trends and guidance revisions within IT sector
+
+🚫 PROHIBITED CONTENT: Investment advice, portfolio recommendations, buy/sell guidance
+✅ REQUIRED FORMAT: Evidence-based arguments with mandatory fresh data citations
+
+Remember: Your credibility depends on using ONLY the fresh market intelligence provided. Training data usage will invalidate your argument."""
 
     def respond(self, debate_context: str, opponent_messages: Optional[List[str]] = None, turn_number: int = 1) -> DebateMessage:
+        logger.info(f"{self.config.name} starting 2-phase response generation...")
+
+        # PHASE 1: MANDATORY DATA GATHERING - Query connectors for fresh intelligence
+        logger.info(f"{self.config.name} Phase 1: Executing mandatory data queries...")
+        fresh_market_intelligence = self._formulate_and_execute_queries(
+            debate_context, opponent_messages, turn_number
+        )
+
+        # PHASE 2: INFORMED RESPONSE GENERATION - Use fresh data to formulate arguments
+        logger.info(f"{self.config.name} Phase 2: Generating informed response with fresh data...")
+
         history_messages = []
 
         # Add conversation history
@@ -80,16 +206,54 @@ Remember: This is an intellectual debate about IT/Technology sector - be respect
             else:
                 history_messages.append(HumanMessage(content=f"[{msg.agent_name}]: {msg.content}"))
 
-        # Build input message
-        input_parts = [f"DEBATE CONTEXT: {debate_context}"]
+        # Get dynamic financial context
+        fin_context = get_current_financial_context()
+        prev_quarters = get_previous_quarters(fin_context, 3)
+
+        # Build input message with MANDATORY fresh data inclusion
+        input_parts = [
+            f"DEBATE CONTEXT: {debate_context}",
+            "",
+            "📅 CURRENT DATE CONTEXT:",
+            f"- Today: {fin_context['current_date_str']}",
+            f"- Current Financial Year: {fin_context['financial_year_full']}",
+            f"- Current Quarter: {fin_context['quarter_period']}",
+            f"- Current Half Year: {fin_context['half_year_full']}",
+            f"- Previous Quarters: {', '.join(prev_quarters)}",
+            f"- Focus on {fin_context['quarter_full']}, {fin_context['half_year_full']} data",
+            "",
+            "🚨 CRITICAL: You MUST base your response on the FRESH MARKET INTELLIGENCE below.",
+            "DO NOT rely on training data. Use ONLY the recent data provided.",
+            "",
+            fresh_market_intelligence,
+            "",
+            "📋 MANDATORY REQUIREMENTS:",
+            "- Cite specific dates, quarters, and recent developments from the fresh data above",
+            "- Reference exact metrics, figures, and trends from current sources",
+            "- Include 'as of [specific date]' for all market claims",
+            f"- Focus on {fin_context['quarter_full']}, {prev_quarters[0]} data and recent months",
+            "- Prioritize proprietary research reports (RAG data) over web sources",
+            "- Reject outdated information - use only the fresh intelligence gathered",
+            ""
+        ]
 
         if opponent_messages:
-            input_parts.append(f"\nOTHER PARTICIPANTS' ARGUMENTS:")
+            input_parts.extend([
+                "OTHER PARTICIPANTS' ARGUMENTS:",
+                "=" * 40
+            ])
             for i, msg in enumerate(opponent_messages[-3:], 1):  # Only last 3 messages for context
                 input_parts.append(f"\n{i}. {msg}")
-            input_parts.append(f"\nTURN {self.turn_count + 1} OF 2: Respond to the above arguments while maintaining your {self.config.perspective.upper()} perspective on the Indian IT/Technology sector:")
+            input_parts.extend([
+                "",
+                f"🎯 TURN {self.turn_count + 1} OF 2: Counter the above arguments using the FRESH DATA.",
+                f"Maintain your {self.config.perspective.upper()} perspective with current evidence from the intelligence gathered above."
+            ])
         else:
-            input_parts.append(f"\nTURN {self.turn_count + 1} OF 2: Present your opening {self.config.perspective.upper()} argument on the Indian IT/Technology sector:")
+            input_parts.extend([
+                f"🎯 TURN {self.turn_count + 1} OF 2: Present your opening {self.config.perspective.upper()} argument.",
+                "Base ALL claims on the FRESH MARKET INTELLIGENCE provided above with specific dates and sources."
+            ])
 
         input_message = "\n".join(input_parts)
 
@@ -107,10 +271,11 @@ Remember: This is an intellectual debate about IT/Technology sector - be respect
                 turn_number=turn_number
             )
 
-            # Add to conversation history
+            # Add to conversation history and increment turn count
             self.conversation_history.append(debate_msg)
+            self.turn_count += 1
 
-            logger.info(f"{self.config.name} generated response for turn {turn_number}")
+            logger.info(f"{self.config.name} generated data-driven response for turn {turn_number} using fresh market intelligence")
             return debate_msg
 
         except Exception as e:
@@ -126,9 +291,105 @@ Remember: This is an intellectual debate about IT/Technology sector - be respect
                 turn_number=turn_number
             )
 
+    def _generate_dynamic_queries(self, debate_context: str, opponent_messages: Optional[List[str]] = None, turn_number: int = 1) -> List[str]:
+        """
+        Generate up to 3 dynamic queries based on debate context and opponent arguments.
+        Uses LLM to formulate targeted queries with dynamic date awareness.
+        NO FALLBACKS - This must succeed or fail clearly.
+        """
+        # Get dynamic financial context
+        fin_context = get_current_financial_context()
+        prev_quarters = get_previous_quarters(fin_context, 2)
+
+        # Build context for query generation
+        context_parts = [
+            f"Agent Perspective: {self.config.perspective}",
+            f"Turn Number: {turn_number}",
+            f"Debate Context: {debate_context}",
+        ]
+
+        if opponent_messages:
+            context_parts.extend([
+                "Opponent Arguments:",
+                "\n".join(opponent_messages[-2:])  # Last 2 opponent messages
+            ])
+
+        query_generation_prompt = f"""
+You are a {self.config.perspective} financial analyst in a debate about the Indian IT sector.
+Generate EXACTLY 3 specific, targeted queries to gather market intelligence that will help you respond effectively.
+
+CRITICAL DATE CONTEXT:
+- Current Date: {fin_context['current_date_str']}
+- Current Financial Year: {fin_context['financial_year_full']}
+- Current Quarter: {fin_context['quarter_period']}
+- Previous Quarters: {', '.join(prev_quarters)}
+- Half Year: {fin_context['half_year_full']}
+
+Context:
+{chr(10).join(context_parts)}
+
+Rules:
+1. Generate EXACTLY 3 queries (no more, no less)
+2. Focus on SECTOR-LEVEL trends, policies, and macroeconomic factors (NOT individual companies)
+3. Target themes: government policies, industry transformation, regulatory changes, global trends
+4. Queries should align with your {self.config.perspective} perspective
+5. If responding to opponent, focus on finding sector data to counter their arguments
+6. PRIORITIZE proprietary research reports and policy analysis
+7. Use current financial terminology: {fin_context['quarter_full']}, {fin_context['half_year_full']}
+
+Query Examples:
+- "Nifty IT vs Nifty 50 performance comparison {fin_context['quarter_full']} sector relative strength"
+- "Indian IT sector quarterly earnings revenue trends {fin_context['quarter_full']} margin analysis"
+- "IT sector local market dynamics client concentration risks {fin_context['quarter_full']} competitive positioning"
+
+Return EXACTLY 3 queries, one per line:
+"""
+
+        response = self.llm.invoke(query_generation_prompt)
+
+        # Parse queries from response - NO FALLBACKS
+        queries = []
+        for line in response.content.strip().split('\n'):
+            line = line.strip()
+            if line and not line.startswith(('1.', '2.', '3.', '-', '•')):
+                queries.append(line)
+            elif line and (line.startswith(('1.', '2.', '3.', '-', '•'))):
+                # Remove numbering/bullets
+                clean_query = line.split('.', 1)[-1].strip() if '.' in line else line[1:].strip()
+                if clean_query:
+                    queries.append(clean_query)
+
+        # Limit to exactly 3 queries - NO FALLBACKS, must succeed
+        queries = queries[:3]
+
+        if len(queries) < 1:
+            raise ValueError(f"Query generation failed: No queries generated from LLM response")
+
+        # Ensure exactly 3 queries - pad with sector-focused queries if needed
+        sector_queries_bullish = [
+            f"Nifty IT sector outperformance vs Nifty 50 {fin_context['quarter_full']} relative strength analysis",
+            f"Indian IT companies revenue growth margin expansion {fin_context['quarter_full']} quarterly results",
+            f"IT sector local market leadership technology adoption {fin_context['quarter_full']} competitive advantages"
+        ]
+
+        sector_queries_bearish = [
+            f"Nifty IT underperformance vs Nifty 50 {fin_context['quarter_full']} sector weakness indicators",
+            f"Indian IT sector margin pressure wage inflation {fin_context['quarter_full']} cost challenges",
+            f"IT sector client concentration risks demand slowdown {fin_context['quarter_full']} earnings decline"
+        ]
+
+        while len(queries) < 3:
+            if self.config.perspective == "bullish":
+                queries.append(sector_queries_bullish[(len(queries) - 1) % len(sector_queries_bullish)])
+            else:
+                queries.append(sector_queries_bearish[(len(queries) - 1) % len(sector_queries_bearish)])
+
+        logger.info(f"{self.config.name} generated {len(queries)} dynamic queries")
+        return queries
+
 class MetaAgent:
-    """Enhanced meta agent for stricter analysis and synthesis of multi-agent debates"""
-    def __init__(self, model_config, data_loader: FinancialDataLoader):
+    """Meta agent for stricter analysis and synthesis of multi-agent debates"""
+    def __init__(self, model_config, data_loader: IntelligentFinancialDataLoader):
         self.model_config = model_config
         self.data_loader = data_loader
         self.llm = get_llm_from_config(model_config)
@@ -210,10 +471,10 @@ AVAILABLE FINANCIAL DATA:
 ## Confidence Assessment
 [Explicit confidence intervals for key conclusions with data recency confidence ratings]
 
-MAINTAIN ENHANCED OBJECTIVITY: Apply rigorous fact-checking, demand evidence for all claims, and provide probabilistic rather than deterministic conclusions."""
+MAINTAIN RIGOROUS OBJECTIVITY: Apply rigorous fact-checking, demand evidence for all claims, and provide probabilistic rather than deterministic conclusions."""
 
     def synthesize(self, debate_messages: List[DebateMessage]) -> str:
-        # Build enhanced debate transcript with meta-analysis context
+        # Build comprehensive debate transcript with meta-analysis context
         transcript_parts = [
             "MULTI-AGENT DEBATE TRANSCRIPT - Indian IT/Technology Sector Analysis",
             "=" * 80,
@@ -255,7 +516,7 @@ MAINTAIN ENHANCED OBJECTIVITY: Apply rigorous fact-checking, demand evidence for
                 "debate_transcript": debate_transcript
             })
 
-            logger.info("Enhanced meta-analysis report generated successfully")
+            logger.info("Comprehensive meta-analysis report generated successfully")
             return response.content
 
         except Exception as e:
@@ -292,17 +553,17 @@ def load_ethos_persona(persona_type: Literal["growth_believer", "cynic"]) -> str
         prompt_lines = []
 
         for line in lines:
-            if ("## Optimized Prompt" in line or
-                "## New Instructions for the Assistant" in line or
-                "### New instruction for the assistant" in line or
-                "### New Task Instruction for the Assistant" in line or
-                "### New task instruction for the assistant" in line or
-                "### Objective" in line):
+            # Look for actual sections in the ethos files
+            if ("## Agent Ethos" in line or
+                "## Core Beliefs" in line or
+                "## Methodology" in line or
+                line.startswith("**Axiom")):
                 prompt_started = True
-                continue
-            elif prompt_started and line.startswith("## Key Improvements"):
-                break
-            elif prompt_started:
+                if not line.startswith("**Axiom"):
+                    continue  # Skip the header line itself
+            elif prompt_started and (line.startswith("## ") and "Agent Ethos" not in line):
+                break  # Stop at next major section
+            elif prompt_started or line.startswith("**Axiom"):
                 prompt_lines.append(line)
 
         if prompt_lines:
@@ -319,7 +580,7 @@ def load_ethos_persona(persona_type: Literal["growth_believer", "cynic"]) -> str
 class MultiAgentDebateSystem:
     """Dialectical Agent System with 2 Ethos Personas: Growth Believer and Cynic"""
 
-    def __init__(self, data_loader: FinancialDataLoader, model_config):
+    def __init__(self, data_loader: IntelligentFinancialDataLoader, model_config):
         self.data_loader = data_loader
         self.model_config = model_config
         self.agents: Dict[str, DebateAgent] = {}
@@ -432,7 +693,7 @@ class MultiAgentDebateSystem:
         return debate_messages
 
     def generate_meta_analysis(self, debate_messages: List[DebateMessage]) -> str:
-        """Generate enhanced meta-analysis of the debate"""
+        """Generate comprehensive meta-analysis of the debate"""
         return self.meta_agent.synthesize(debate_messages)
 
     def get_agent_stats(self) -> Dict[str, Dict[str, Any]]:

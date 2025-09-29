@@ -20,11 +20,25 @@ class JinaSearchTool:
         }
         url = self.base_url.format(query=self._format_query(query))
         print(url)
-        response = requests.get(url, headers=headers)
-        return self._format_results(response.json())
+
+        try:
+            response = requests.get(url, headers=headers, timeout=30)
+            response.raise_for_status()
+            return self._format_results(response.json())
+        except requests.exceptions.RequestException as e:
+            print(f"Jina API request failed: {e}")
+            return []
+        except Exception as e:
+            print(f"Jina API error: {e}")
+            return []
     
     def _format_results(self, results):
         response_json = []
+        # Handle case where results is None or doesn't have expected structure
+        if not results or "data" not in results or results["data"] is None:
+            print("Warning: Jina API returned no data or unexpected format")
+            return response_json
+
         for res in results["data"]:
             response_json.append({
                 "title": res.get("title", ""),
