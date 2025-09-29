@@ -1,8 +1,8 @@
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from rag_setup.db_utils import ChromaDB
-from rag_setup.gemini_embedding import GeminiEmbedding
+from utils.vector_db_utils import ChromaDB
+from utils.gemini_embedding import GeminiEmbedding
 
 class DataRetriever:
     def __init__(self, summary_collection_name, chunk_collection_name, gemini_api_key):
